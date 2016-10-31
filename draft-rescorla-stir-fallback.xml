@@ -20,7 +20,7 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
 ]>
 <!--?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?-->
 <!-- used by XSLT processors -->
-<!-- For a complete list and description of processing instructions (PIs), 
+<!-- For a complete list and description of processing instructions (PIs),
     please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
     (Here they are set differently than their defaults in xml2rfc v1.32) -->
@@ -36,29 +36,29 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
 <!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
 <?rfc sortrefs="yes" ?>
 <!-- sort the reference entries alphabetically -->
-<!-- control vertical white space 
+<!-- control vertical white space
     (using these PIs as follows is recommended by the RFC Editor) -->
 <?rfc compact="no" ?>
 <!-- do not start each main section on a new page -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-rescorla-stir-fallback-01.txt"
+<rfc category="std" docName="draft-rescorla-stir-fallback-latest"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
-    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    you can add the attributes updates="NNNN" and obsoletes="NNNN"
     they will automatically be output with "(if approved)" -->
 
   <!-- ***** FRONT MATTER ***** -->
 
   <front>
-    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
          full title is longer than 39 characters -->
 
     <title abbrev="STIR Fallback">STIR Out of Band Architecture and Use Cases</title>
-	
+
 			    <author fullname="Eric Rescorla" initials="E.K." surname="Rescorla">
       <organization>Mozilla</organization>
 
@@ -95,22 +95,25 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
 
     <abstract>
       <t>
-	  Existing work has defined ways to secure the identity of 
-	  </t>
+	Existing work has defined ways to secure the identity of SIP
+        calls, but the in-band mechanisms defined in that work do not properly
+        transit the PSTN. This document defines out-of-band mechanisms
+        which do not require modifying the messages that pass over the PSTN.
+      </t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
 	<t>
-	The STIR problem statement <xref target="RFC7340"/> describes widespread problems enabled impersonation in the telephone network, including illegal robocalling, voicemail hacking, and swatting.
+	The STIR problem statement <xref target="RFC7340"/> describes widespread problems enabled by impersonation in the telephone network, including illegal robocalling, voicemail hacking, and swatting.
 	As telephone services are increasingly migrating onto the Internet, and using Voice over IP (VoIP) protocols such as <xref target="RFC3261">SIP</xref>, it is necessary for these protocols
-	to support stronger identity mechanisms to prevent impersonation. For example, <xref target="I-D.ietf-stir-rfc4474bis"/> defines an Identity header of SIP requests capable of carrying a <xref target="I-D.ietf-stir-passport">PASSporT</xref> in SIP as a means to cryptographically attest that the originator of a telephone call is authorized to use the calling party number (or, for native SIP cases, SIP URI) associated with the originator of the call.
-	of the request. 
+	to support stronger identity mechanisms to prevent impersonation. For example, <xref target="I-D.ietf-stir-rfc4474bis"/> defines an Identity header of SIP requests capable of carrying a <xref target="I-D.ietf-stir-passport">PASSporT</xref> object in SIP as a means to cryptographically attest that the originator of a telephone call is authorized to use the calling party number (or, for native SIP cases, SIP URI) associated with the originator of the call.
+	of the request.
 		</t><t>
-	Not all telephone calls use SIP today, however; and even those that do use SIP do not always carry SIP signaling end-to-end. 
+	Not all telephone calls use SIP today, however; and even those that do use SIP do not always carry SIP signaling end-to-end.
    Most calls from telephone numbers still traverse the Public Switched Telephone Network (PSTN) at some
-   point.  Broadly, these calls fall into one of three categories:
+   point.  Broadly, calls fall into one of three categories:
 	</t><t><list style="numbers"><t>
 	One or both of the endpoints is actually a PSTN endpoint.
 	 </t><t>
@@ -142,12 +145,12 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
 	a PASSporT object created in the originating network of the call can reach the terminating network even when it cannot be carried end-to-end in-band in the call signaling. This relies on
 	a new service defined in this document that permits the PASSporT object to be stored during call processing and retrieved for verification purposes.
     </t>
-    </section> 
-	
+    </section>
+
 	<section title="Terminology">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
-    </section> 
-	
+    </section>
+
 	<section title="Operating Environments">
       <t>
 	     This section describes the environment in which the proposed
@@ -171,14 +174,14 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
     +----------+        \                      /        +----------+
                          +---             +---+
                              \           /
-                              +---------+	 
+                              +---------+
 	]]></artwork>
      </figure>
 	 		 <t>
 			    In a more complicated setting, Alice and/or Bob may not have a smart or
    programmable device, but one or both of them are behind a STIR-aware gateway that can participate in out-of-band coordination, as shown below:
 	  </t>
-	 
+
 	 	<figure>
      <artwork><![CDATA[
                                +---------+
@@ -194,7 +197,7 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
                                +---------+
 	]]></artwork>
      </figure>
-	 
+
 		 <t>
 		    In such a case, Alice might have an analog connection to her gateway/
    switch which is responsible for her identity.  Similarly, the gateway
@@ -203,7 +206,7 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
    POTS mechanisms.
 	  </t>
     </section>
-	
+
 	<section anchor="data" title="Dataflows">
       <t>Because in these operating environments endpoints cannot pass cryptographic information to one another directly
 	  through signaling, any solution must
@@ -230,28 +233,28 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
    protocols, it shares their drawbacks.  Specifically, the callee must
    maintain a full-time connection to the CPS to serve as a notification
    channel.  This comes with the usual networking costs to the callee
-   and is especially problemtatic for mobile endpoints.  Thus, we focus
+   and is especially problematic for mobile endpoints.  Thus, we focus
    on the second architecture in which the PSTN incoming call serves as
    the notification channel and the callee can then contact the CPS to
    retrieve the PASSporT.
 	  </t>
     </section>
-	
+
 	<section anchor="uses" title="Use Cases">
 	<t>
-	The following are the motivating use cases for this mechanism. Bear in mind that just as in <xref target="I-D.ietf-stir-rfc4474bis"/> there may be multiple Identity headers in a single SIP 
-	INVITE, so there may be multiple PASSporTs in this out-of-band mechanism associated with a single call. For example, a SIP user agent might create a PASSporT for a call with an end user 
+	The following are the motivating use cases for this mechanism. Bear in mind that just as in <xref target="I-D.ietf-stir-rfc4474bis"/> there may be multiple Identity headers in a single SIP
+	INVITE, so there may be multiple PASSporTs in this out-of-band mechanism associated with a single call. For example, a SIP user agent might create a PASSporT for a call with an end user
 	credential, and as the call exits the originating administrative domain the network authentication service might create its own PASSporT for the same call. As such, these use cases may overlap
 	in the processing of a single call.
 	</t>
 		<section anchor="case-ip-pstn" title="Case 1: VoIP to PSTN Call">
 		<t>
-		A call originates in the SIP world in a STIR-aware administrative domain. The local authentication service for that administrative domain creates a PASSporT which is carried 
+		A call originates in the SIP world in a STIR-aware administrative domain. The local authentication service for that administrative domain creates a PASSporT which is carried
 		in band in the call per <xref target="I-D.ietf-stir-rfc4474bis"/>. The call is routed out of the originating administrative domain and eventually reaches a gateway to the PSTN.
 		Eventually, the call will terminate on a mobile smartphone that supports this out-of-band mechanism.
 		</t><t>
-		In this use case, the originating authentication service can store the PASSporT with the appropriate CPS for the target telephone number as a fallback in case SIP signaling will not 
-		reach end-to-end. When the destination mobile smartphone receives the call over the PSTN, it consults the CPS and discovers a PASSporT from the originating telephone number waiting for it. 
+		In this use case, the originating authentication service can store the PASSporT with the appropriate CPS for the target telephone number as a fallback in case SIP signaling will not
+		reach end-to-end. When the destination mobile smartphone receives the call over the PSTN, it consults the CPS and discovers a PASSporT from the originating telephone number waiting for it.
 		It uses this PASSporT to verify the calling party number.
 		</t>
 		</section>
@@ -274,21 +277,21 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
 		it can retrieve the PASSporT and, when it creates a SIP INVITE for this call, add a corresponding Identity header per <xref target="I-D.ietf-stir-rfc4474bis"/>. When the SIP INVITE reaches
 		the destination administrative domain, it will be able to verify the PASSporT normally. Note that to avoid discrepancies with the Date header field value, only full-form PASSporT should be used for this purpose.
 		</t>
-		</section>	
+		</section>
 		<section anchor="case-gateways" title="Case 4: Gateway Out-of-band">
 		<t>
-		A call originates in the SIP world in a STIR-aware administrative domain. The local authentication service for that administrative domain creates a PASSporT which is carried 
-		in band in the call per <xref target="I-D.ietf-stir-rfc4474bis"/>. The call is routed out of the originating administrative domain and eventually reaches a gateway to the PSTN. 
+		A call originates in the SIP world in a STIR-aware administrative domain. The local authentication service for that administrative domain creates a PASSporT which is carried
+		in band in the call per <xref target="I-D.ietf-stir-rfc4474bis"/>. The call is routed out of the originating administrative domain and eventually reaches a gateway to the PSTN.
 		</t><t>
 		In this case, the originating authentication service does not support the out-of-band mechanism, so instead the gateway to the PSTN extracts the PASSporT from the SIP request and provisions it to the CPS. (When the call reaches the gateway to the PSTN, the gateway might first check the CPS to see if a PASSporT object had already been provisioned for this call, and only provision a PASSporT if none is present).
 		</t><t>
 		Ultimately, the call may terminate on the PSTN, or be routed back to the IP world. In the former case, perhaps the destination endpoints queries the CPS to retrieve the PASSporT provisioned by the first gateway. Or if the call ultimately returns to the IP world, it might be the gateway from the PSTN back to the Internet that retrieves the PASSporT from the CPS and attaches it to the new SIP INVITE it creates, or it might be the terminating administrative domain's verification service that checks the CPS when an INVITE arrives with no Identity header field. Either way the PASSporT can survive the gap in SIP coverage caused by the PSTN leg of the call.
 		</t>
 		</section>
-	
+
 	</section>
-	
-	
+
+
 	<section anchor="arch" title="Solution Architecture">
       <t>In this section, we discuss a strawman architecture along the lines
    described in the previous section.  This discussion is deliberately
@@ -306,17 +309,17 @@ vim:et:ts=2:sw=2:spell:spelllang=en:tw=80
    endpoint instead.  It might be the case that multiple entities are
    able to act for a given number, provided that they have the
    appropriate authority. <xref target="I-D.ietf-stir-certificates"/> describes
-   a credentials system suitable for this purpose; 
+   a credentials system suitable for this purpose;
    the question of how an entity is determined
    to have control of a given number is out of scope for the current document.
-		</t>		
+		</t>
 		</section>
 		<section anchor="solve" title="Solution Architecture">
 		<t>
 		An overview of the basic calling and verification process is shown
    below.  In this diagram, we assume that Alice has the number
    +1.111.111.1111 and Bob has the number +2.222.222.2222.
-		</t>		
+		</t>
 			 	<figure>
      <artwork><![CDATA[
 Alice                       Call Placement Service                  Bob
@@ -369,20 +372,20 @@ Call from 1.111.111.1111 ---------------------------------------------->
 	  	 </t><t>
 	  The attacker wishes to substitute himself for an existing call as
       described in <xref target="sub"/>.
-	</t></list></t><t>	
+	</t></list></t><t>
 		If an attacker can inject fake PASSporT into the CPS or in the
 		 communication from the CPS to the callee, he can mount either attack.
    As PASSporTs should be
    digitally signed by an appropriate authority for the number and verified by the callee
    (see <xref target="phone"/>), this should not arise in ordinary operations.  For privacy and robustness reasons,
-   using TLS on the originating side when storing the PASSporT at the CPS is recommended. 
+   using TLS on the originating side when storing the PASSporT at the CPS is recommended.
    	  	 </t><t>
 		 The entire system depends on the security of the credential
    infrastructure.  If the authentication credentials for a given number
    are compromised, then an attacker can impersonate calls from that
    number.
 		</t>
-		</section>	
+		</section>
 	<section anchor="sub" title="Substitution Attacks">
 		<t>
    All that receipt of the PASSporT from the CPS proves to the called party is that Alice is trying to call
@@ -426,14 +429,14 @@ Call from 1.111.111.1111 ---------------------------------------------->
    waiting.  Note:  in a SIP environment, the callee might notice that
    there were multiple INVITEs and thus detect this attack.
 		</t>
-		</section>	
+		</section>
     </section>
-	
+
 	<section anchor="cps" title="Call Placement Service Discovery and Interface">
 	<t>
 	In order for the two ends of the out-of-band dataflow to coordinate, they must agree on a way to discover a CPS and retrieve PASSporT objects from it
 	based solely on the rendezvous information available: the calling party number and the called number.
-	There are a number of potential service discovery mechanisms that could be used for 
+	There are a number of potential service discovery mechanisms that could be used for
 	this purpose. The means of service discovery may vary by use case.
 	</t><t>
 	There exist a number of common directory systems that might be used to translate telephone numbers into the URIs of a CPS. <xref target="RFC6116">ENUM</xref> is commonly implemented,
@@ -449,7 +452,7 @@ Call from 1.111.111.1111 ---------------------------------------------->
 	Future versions of this specification will identify suitable service discovery mechanisms for out-of-band STIR.
 	</t>
 	</section>
-	
+
 	    <section anchor="enhance" title="Some Potential Enhancements">
       <t>   Section 4 provides a broad sketch of an approach.  In this section,
    we consider some potential enhancements.  Readers can feel free to
@@ -480,7 +483,7 @@ Call from 1.111.111.1111 ---------------------------------------------->
    are issued to end-user devices, rather than large operators.
 	  </t>
 
-	
+
 	      <section anchor="lookup" title="Credential Lookup">
       <t>
 	In order to encrypt a PASSporT, the caller needs access to the callee's
@@ -501,7 +504,7 @@ Call from 1.111.111.1111 ---------------------------------------------->
 	  Have caching servers in the user's network that proxy their
       fetches and thus conceal the relationship between the user and the
       credentials they are fetching.
-	</t></list></t><t>	
+	</t></list></t><t>
 	   Clearly, there is a privacy/timeliness tradeoff in that getting
    really up-to-date knowledge about credential validity requires
    contacting the credential directory in real-time (e.g., via OCSP).
@@ -558,9 +561,9 @@ Call from 1.111.111.1111 ---------------------------------------------->
    properties depend on having a single concrete scheme to analyze.</t>
     </section>
   </middle>
-  
-  
-  
+
+
+
 
   <!--  *****BACK MATTER ***** -->
 
@@ -589,7 +592,7 @@ Call from 1.111.111.1111 ---------------------------------------------->
 &I-D.ietf-stir-passport;
 &I-D.peterson-modern-teri;
 &I-D.rosenberg-dispatch-vipr-overview;
-  
+
     </references>
 
 
